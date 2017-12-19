@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/gidole-regular" type="text/css"/>
-    <title>The Trumps</title>
+    <title>Show of hands</title>
   </head>
   <body>
 <style>
@@ -145,7 +145,7 @@ svg {
 <h3>Individual contributions</h3>
 <ul>
   <li>Animation of points: xtp778, Jens Egholm Pedersen</li>
-  <li>Hover coloring: nbs151, Dan Graakjær Kristensen</li>
+  <li>Section color highlighting: nbs151, Dan Graakjær Kristensen</li>
 </ul>
 
 <script type="text/javascript">
@@ -243,6 +243,14 @@ svg {
           .attr("class", "cell-border")
           .attr("d", d => "M" + d.filter(xy => xy != null).join("L") + "Z")
 
+      const tooltip = d3.select("body")
+        .append("div")
+        .style("position", "absolute")
+        .style("z-index", "10")
+        .style("visibility", "hidden")
+        .text("a simple tooltip");
+
+    
 
       const sites = diagram["cells"].map(c => c["site"])
       right.on("mousemove", function() {
@@ -250,17 +258,17 @@ svg {
         const closest = diagram.find(mouse[0], mouse[1])
         const index = sites.findIndex(x => x == closest)
         updateHand(index, currentIndex)
+
         d3.selectAll(".cell-border")
         .attr("fill", "white")
+
         d3.selectAll(".cell-border")
         .filter((e,i) => i == index)
         .attr("fill", "#00a7cc")
-        console.log(closest)
-
       })
-    })
 
-const colr = closest.map(r => r)
+         
+    })
 
 
 
