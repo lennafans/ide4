@@ -6,7 +6,13 @@
     <title>The Trumps</title>
   </head>
   <body>
+<style>
 
+.cell {
+  fill: #fff;
+  stroke: #000;
+}
+</style>
 <h1>Trumpeti dump</h1>
 <p class="authors">nbs151 (Dan Graakjær) &emsp; and &emsp; xtp778 (Jens Egholm)</p>
 
@@ -16,7 +22,7 @@
 <script type="text/javascript">
   d3.select(window).on('load', () => {
     const width = window.innerWidth * 0.9;
-    const height = window.innerHeight * 0.9;
+    const height = window.innerHeight * 0.8;
     const padding = 40;
 
     const svg = d3.select("svg")
@@ -33,7 +39,7 @@
       .attr("transform", "translate(" + (width / 2) + ", 0)")
 
     const scaleLeftX = d3.scaleLinear()
-      .domain([0, 1])
+      .domain([0.2, 1.2])
       .range([ padding, (width - padding) / 2 ]);
 
     const scaleLeftY = d3.scaleLinear()
@@ -105,15 +111,6 @@
         const index = sites.findIndex(x => x == closest)
         updateHand(index)
       })
-        // .data()
-        // console.log(voronoi.find(0, 0))
-      // right.selectAll("pca-dots").data(handsPca)
-      //   .enter()
-      //   .append("circle")
-      //   .attr("cx", d => scaleRightX(d[0]))
-      //   .attr("cy", d => scaleRightY(d[1]))
-      //   .attr("r", 20)
-      //   .on("mouseover", d => updateHand(d[2]))
     })
 
 });
