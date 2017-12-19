@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
-     <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/cormorant" type="text/css"/>
     <title>The Trumps</title>
   </head>
   <body>
@@ -24,26 +23,39 @@
         .attr("width", width)
         .attr("height", height);
 
- 
+    const left = svg.append("g")
+      .attr("width", width / 2)
+      .attr("height", height / 2)
+
+    const scaleLeftX = d3.scaleLinear()
+      .domain([0, 1])
+      .range([ padding, (width - padding) / 2 ]);
+
+    const scaleLeftY = scaleRightY = d3.scaleLinear()
+      .domain([0, 1])
+      .range([ padding , height - padding ]);
+
+    let hands = [];
+
+    const updateHands = (index) => {
+      const xy = hands[index];
+      left.selectAll("hand-dots").data(xy)
+          .enter()
+          .append("circle")
+          .attr("cx", d => scaleLeftX(d[0]))
+          .attr("cy", d => scaleLeftY(d[1]))
+          .attr("r", 5)
+    }
+
   	d3.csv("hands.csv", row => row, data => {
-    	//const x = data.map(r => r.slice(0,56))
     	const x = data.map(r => Object.keys(r).slice(0, 56).map(key => r[key]))
     	const y = data.map(r => Object.keys(r).slice(56, 112).map(key => r[key]))
-    	const xy = x.map(function(e, i) {
-  		const xyt = xy.map(function(e,i ))
+    	hands = x.map((xs, xsi) => xs.map((x, xi) => [x, y[xsi][xi]]))
+    });
 
-  		return [e, y[i]];});
-
-
-    	console.log(xy)
-
-
-    	}
-
-    );
-
-
-
+    d3.csv("hands_pca.csv", row => row, data => {
+      //console.log(data);
+    })
 
 });
 </script>
