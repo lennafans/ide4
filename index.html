@@ -38,15 +38,7 @@
 
     const scaleLeftY = d3.scaleLinear()
       .domain([0, 1])
-      .range([ padding , height - padding ]);
-
-    const scaleRightX = d3.scaleLinear()
-      .domain([-0.7, 0.7])
-      .range([ padding, (width - padding) / 2 ]);
-
-    const scaleRightY = d3.scaleLinear()
-      .domain([-1, 1])
-      .range([ padding , height - padding ]);
+      .range([ padding , height - (padding * 2) ]);
 
     let hands = [];
 
@@ -71,14 +63,50 @@
     });
 
     d3.csv("hands_pca.csv", data => {
-      const handsPca = data.map((row, i) => [row[1], row[2], i])
-      right.selectAll("pca-dots").data(handsPca)
-        .enter()
-        .append("circle")
-        .attr("cx", d => scaleRightX(d[0]))
-        .attr("cy", d => scaleRightY(d[1]))
-        .attr("r", 20)
-        .on("mouseover", d => updateHand(d[2]))
+      let maxX = 0, minX = 0
+      let maxY = 0, minY = 0
+      const handsPca = data.map((row, i) => {
+        minX = row[1] < minX ? row[1] : minX
+        maxX = row[1] > maxX ? row[1] : maxX
+        minY = row[2] < minY ? row[2] : minY
+        maxY = row[2] > maxY ? row[2] : maxY
+        return [row[1], row[2], i]
+      })
+
+      const scaleRightX = d3.scaleLinear()
+        .domain([minX, maxX])
+        .range([ padding, (width - padding) / 2 ]);
+
+      const scaleRightY = d3.scaleLinear()
+        .domain([minY, maxY])
+        .range([ padding , height - (padding * 2) ]);
+
+      const diagram = d3.voronoi(handsPca)
+        .x(d => scaleRightX(d[0]))
+        .y(d => scaleRightY(d[1]))(handsPca)
+      const cells = diagram.cells
+      const polygons = diagram.polygons()
+
+      const border = right.append("g")
+        .attr("class", "cell")
+        .selectAll("cell")
+        .data(polygons)
+        .enter().append("g")
+
+      border.append("path")
+          .attr("class", "cell-border")
+          .attr("d", d => "M" + d.filter(xy => xy != null).join("L") + "Z")
+
+
+        // .data()
+        // console.log(voronoi.find(0, 0))
+      // right.selectAll("pca-dots").data(handsPca)
+      //   .enter()
+      //   .append("circle")
+      //   .attr("cx", d => scaleRightX(d[0]))
+      //   .attr("cy", d => scaleRightY(d[1]))
+      //   .attr("r", 20)
+      //   .on("mouseover", d => updateHand(d[2]))
     })
 
 });
