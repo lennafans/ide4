@@ -20,6 +20,10 @@ body {
   background-color: #B9D3EE;
 }
 
+code {
+  font-family: courier, sans-serif;
+}
+
 svg {
   background-color: #FFF;
   border: 1px solid #000;
@@ -104,10 +108,36 @@ svg {
 
 <h2>Results</h2>
 <p>
-  Moving the mouse to the right part of the visualisation and hovering from the
-  left to the right shows a clear pattern in the data.
+  Moving the mouse to the second visualisation and hovering from the
+  left to the right shows a clear pattern in the data. When close to the left
+  part of the visualisation, the fingers of the hands are widely spread and the
+  hands are short. To the right the fingers are joined and the hands are in
+  general longer.
+</p>
+<p>
+  This axis (<code>x</code>) shows the component that explains most variance,
+  and it makes sense that a spread hand explains much of the patterns in the data.
+</p>
+<p>
+  Hovering from top to bottom also shows a pattern, although it's arguably
+  less prominent. In the top left corner the little, ring and middle fingers
+  all point downwards, while the index and thumb points upwards. In the bottom
+  left corner, the thumb moves downwards and the middle and ring fingers move
+  upwards. The pattern is less clear in the right part, but still visible.
+</p>
+<p>
+  This axis (<code>y</code>) shows the component that explains the second-most
+  variance. In that light it makes sense that the pattern is less clear than
+  the first component.
 </p>
 <h2>Conclusion</h2>
+<p>
+  The combination of a visualisation of the raw data and the derived component
+  analysis information, gives a strong intuitive understanding of how PCA can
+  help to explain data patterns in different ways. Plotting the first two PCA
+  numbers on a 2-dimensional plane and letting the user explore it, helps to
+  relate the two visualisations to each other.
+</p>
 
 <script type="text/javascript">
   d3.select(window).on('load', () => {
