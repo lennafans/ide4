@@ -145,6 +145,7 @@ svg {
 <h3>Individual contributions</h3>
 <ul>
   <li>Animation of points: xtp778, Jens Egholm Pedersen</li>
+  <li>Hover coloring: nbs151, Dan Graakjær Kristensen</li>
 </ul>
 
 <script type="text/javascript">
@@ -242,14 +243,26 @@ svg {
           .attr("class", "cell-border")
           .attr("d", d => "M" + d.filter(xy => xy != null).join("L") + "Z")
 
+
       const sites = diagram["cells"].map(c => c["site"])
       right.on("mousemove", function() {
         const mouse = d3.mouse(this)
         const closest = diagram.find(mouse[0], mouse[1])
         const index = sites.findIndex(x => x == closest)
         updateHand(index, currentIndex)
+        d3.selectAll(".cell-border")
+        .attr("fill", "white")
+        d3.selectAll(".cell-border")
+        .filter((e,i) => i == index)
+        .attr("fill", "#00a7cc")
+        console.log(closest)
+
       })
     })
+
+const colr = closest.map(r => r)
+
+
 
 });
 </script>
