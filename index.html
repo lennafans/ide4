@@ -7,17 +7,91 @@
   </head>
   <body>
 <style>
-
 .cell {
   fill: #fff;
   stroke: #000;
 }
 </style>
-<h1>Trumpeti dump</h1>
+<h1>Reducing hand dimensionality</h1>
 <p class="authors">nbs151 (Dan Graakjær) &emsp; and &emsp; xtp778 (Jens Egholm)</p>
+<h2>Introduction</h2>
+<p>
+  The following visualisation shows outlines of 40 different hands. Each hand
+  is drawn using 56 coordinates. In total that gives us 112 numbers, that
+  describes the hand in a 2-dimensional euclidian space. If we wished to
+  compare the features of the hands and understand which elements would be
+  most important to distiguish between different hands, we would have to
+  compare all the 112 numbers of all the different hands.
+</p>
+<h2>Principal component analysis</h2>
+<p>
+  Thinking about the 112 numbers, they can be seen as representing one long
+  vector of numbers. With a little imagination, this vector can be plotted in
+  a 112-dimesional space. Although it would be hard to visualise, this would
+  give us a clear view of how each number helps us to tell the hands apart.
+</p>
+<p>
+  Unfortunately we cannot perceive a 112-dimesional space, so we have to
+  improvise. One possible approach is to reduce the dimensionality of the
+  space into something we can see (2- or 3-dimensions). This can be done either
+  by "folding" the data onto it self, and thus reducing the number of dimensions
+  in which the figures extend (manifold), or by trying to find patterns in the
+  data that can help us to understand most of it - even when we throw away
+  some dimensions. This is called principal component analysis or PCA.
+</p>
+<p>
+  To summarise, PCA tries to find hyperplanes in the data that capture as much
+  variance as possible. Variance is a term to describe how much change a
+  dimension gives us, and this is what we humans use to distiguish one hand
+  from another. If a dimension has very little variance, it does not help us
+  very much when distinguishing hands from each other. By finding the
+  hyperplanes that can explain more variance than other hyperplanes, we can
+  use these hyperplanes as our new dimensions. All the other dimensions will
+  then be projected onto that hyperplane.
+</p>
+<p>
+  The final result of this process is the same number of dimensions (112), but
+  projected onto different hyperplanes. The first hyperplane in the list is
+  able to capture a large part of the variation, the next a little less and
+  so on. Each number is called a "principal component" because they are able
+  to explain the most significant components in the data. Hence principal
+  component analysis.
+</p>
+<h2>Visualisation introduction</h2>
+<p>
+  The right and second part of the visualisation shows the first two principal
+  components of each of the 40 hands. So each field represents the value of
+  the first and second principal component out of all 112. If you hover over
+  a field with your mouse, the left visualisation will change to show the hand
+  that corresponds to the component values (and in this case coordinates) of
+  the field.
+</p>
+<p>
+  We chose to visualise this using a voronoi diagram because we would like to
+  make it as easy as possible to examine each component and hand. The diagram
+  allows each point to extend in space as much as possible without overlapping
+  with other points. <sup><a href="https://en.wikipedia.org/wiki/Voronoi_diagram">1</a></sup>
+</p>
 
 <svg></svg>
+<p>
+  Figure 1. Changing visualisation of 40 different hands each with 56
+  coordinates (left) and a field of the different principal components for each
+  of the 40 hands (right).
+ </p>
 
+   Text surrounding the visualization which gives an intuitive description of
+   the dataset and PCA (introduction), helps the reader navigate the visualization
+   (methods), makes observations about the dataset (results) and extract some meaning
+   from these observations (conclusion). We expect the last two sections to make
+   meaningful and insightful observations.
+
+<h2>Results</h2>
+<p>
+  Moving the mouse to the right part of the visualisation and hovering from the
+  left to the right shows a clear pattern in the data. 
+</p>
+<h2>Conclusion</h2>
 
 <script type="text/javascript">
   d3.select(window).on('load', () => {
@@ -66,6 +140,8 @@
         .data(hands[0])
         .enter()
         .append("circle")
+
+      updateHand(0)
     });
 
     d3.csv("hands_pca.csv", data => {
