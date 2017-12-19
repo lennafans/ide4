@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/gidole-regular" type="text/css"/>
     <title>The Trumps</title>
   </head>
   <body>
@@ -11,8 +12,23 @@
   fill: #fff;
   stroke: #000;
 }
+
+
+body {
+   font-family: 'GidoleRegular';
+  font-size: 130%;
+  background-color: #B9D3EE;
+}
+
+svg {
+  background-color: #FFF;
+  border: 1px solid #000;
+  margin: 0 0 0 5vw;
+
+}
+
 </style>
-<h1>Reducing hand dimensionality</h1>
+<h1>Show of hands</h1>
 <p class="authors">nbs151 (Dan Graakjær) &emsp; and &emsp; xtp778 (Jens Egholm)</p>
 <h2>Introduction</h2>
 <p>
@@ -89,7 +105,7 @@
 <h2>Results</h2>
 <p>
   Moving the mouse to the right part of the visualisation and hovering from the
-  left to the right shows a clear pattern in the data. 
+  left to the right shows a clear pattern in the data.
 </p>
 <h2>Conclusion</h2>
 
@@ -104,6 +120,7 @@
         .attr("height", height);
 
     const left = svg.append("g")
+      .attr("class", "left")
       .attr("width", width / 2)
       .attr("height", height / 2)
 
