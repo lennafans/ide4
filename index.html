@@ -94,6 +94,8 @@ svg {
 </p>
 
 <svg></svg>
+<div id="slider1"></div>
+<div id="slider2"></div>
 <p>
   Figure 1. Changing visualisation of 40 different hands each with 56
   coordinates (left) and a field of the different principal components for each
@@ -139,6 +141,12 @@ svg {
   relate the two visualisations to each other.
 </p>
 
+<hr>
+<h3>Individual contributions</h3>
+<ul>
+  <li>Animation of points: xtp778, Jens Egholm Pedersen</li>
+</ul>
+
 <script type="text/javascript">
   d3.select(window).on('load', () => {
     const width = window.innerWidth * 0.9;
@@ -167,16 +175,20 @@ svg {
       .domain([0, 1])
       .range([ padding , height - (padding * 2) ]);
 
+    let currentIndex = 0;
     let hands = [];
+
+    const transition = d3.transition().duration(30).ease(d3.easeLinear)
 
     const updateHand = (index) => {
       const xy = hands[index];
       left.selectAll("circle")
           .data(xy)
-          .attr("cx", d => scaleLeftX(d[0]))
-          .attr("cy", d => scaleLeftY(d[1]))
-          .attr("r", 5)
-    }
+          .transition(transition)
+          .attr("transform", d => "translate(" + scaleLeftX(d[0]) + ", " + scaleLeftY(d[1]) + ")")
+      // Update index
+      currentIndex = index;
+    };
 
   	d3.csv("hands.csv", data => {
     	const x = data.map(r => Object.keys(r).slice(0, 56).map(key => r[key]))
@@ -187,6 +199,9 @@ svg {
         .data(hands[0])
         .enter()
         .append("circle")
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .attr("r", 5)
 
       updateHand(0)
     });
@@ -232,7 +247,7 @@ svg {
         const mouse = d3.mouse(this)
         const closest = diagram.find(mouse[0], mouse[1])
         const index = sites.findIndex(x => x == closest)
-        updateHand(index)
+        updateHand(index, currentIndex)
       })
     })
 
