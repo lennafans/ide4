@@ -66,24 +66,25 @@
       let maxX = 0, minX = 0
       let maxY = 0, minY = 0
       const handsPca = data.map((row, i) => {
-        minX = row[1] < minX ? row[1] : minX
-        maxX = row[1] > maxX ? row[1] : maxX
-        minY = row[2] < minY ? row[2] : minY
-        maxY = row[2] > maxY ? row[2] : maxY
+        minX = Math.min(row[1], minX)
+        maxX = Math.max(row[1], maxX)
+        minY = Math.min(row[2], minY)
+        maxY = Math.max(row[2], maxY)
         return [row[1], row[2], i]
       })
 
       const scaleRightX = d3.scaleLinear()
         .domain([minX, maxX])
-        .range([ padding, (width - padding) / 2 ]);
+        .range([ 0, (width / 2) ]);
 
       const scaleRightY = d3.scaleLinear()
         .domain([minY, maxY])
-        .range([ padding , height - (padding * 2) ]);
+        .range([ 0, height ]);
 
-      const diagram = d3.voronoi(handsPca)
+      const diagram = d3.voronoi()
         .x(d => scaleRightX(d[0]))
-        .y(d => scaleRightY(d[1]))(handsPca)
+        .y(d => scaleRightY(d[1]))
+        .size([width / 2, height])(handsPca)
       const cells = diagram.cells
       const polygons = diagram.polygons()
 
@@ -97,7 +98,13 @@
           .attr("class", "cell-border")
           .attr("d", d => "M" + d.filter(xy => xy != null).join("L") + "Z")
 
-
+      const sites = diagram["cells"].map(c => c["site"])
+      right.on("mousemove", function() {
+        const mouse = d3.mouse(this)
+        const closest = diagram.find(mouse[0], mouse[1])
+        const index = sites.findIndex(x => x == closest)
+        updateHand(index)
+      })
         // .data()
         // console.log(voronoi.find(0, 0))
       // right.selectAll("pca-dots").data(handsPca)
